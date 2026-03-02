@@ -8,16 +8,7 @@
     <script type="module" src="https://cdn.jsdelivr.net/npm/@stlite/browser@1.2.0/build/stlite.js"></script>
   </head>
   <body>
-    <streamlit-app>
-import streamlit as st
-
-st.title("Custom Element Test")
-
-option = st.selectbox(
-    'How would you like to be contacted?',
-    ('Email', 'Home phone', 'Mobile phone'))
-
-st.write('You selected:', option)
+    <streamlit-app src="./cv_stream.py">
     </streamlit-app>
   </body>
 </html>
