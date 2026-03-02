@@ -3,13 +3,9 @@ import time
 import streamlit as st
 from streamlit_image_coordinates import streamlit_image_coordinates
 
-""" Aut_Cell_2D(reglas) ejecutará el programa deseado
-reglas = 'juego de la vida' para el juego de la vida
-reglas = 'solidificación Neumann' Para ejecutar solidificación.
-
-Al dibujarse la rejilla se espera la condición inicial y se da 'Enter' para
-inicial el proceso. Se puede agregar puntos durante el proceso (no supe cómo quitarle)
-El proceso se puede bloquear con 'Enter'"""
+""" Al dibujarse la rejilla se espera la condición inicial puedes ejecutar el proceso
+pulsando el boton "Iniciar juego de la vida". Se puede agregar puntos durante el proceso.
+El proceso se detendrá al pulsa "Detener juego de la vida". """
 
 
 class juego_dela_vida:
@@ -32,12 +28,36 @@ class juego_dela_vida:
 
 
         ## dibujamos la imagen con rejilla y esperamos a que se dé una condición inicial
+        st.button('Fill_random', on_click=self.fill_with_random)
+
         streamlit_image_coordinates(self.img, key='image', on_click=self.change_color)
 
         if run_game:
             self.juego_de_la_vida()
         else:
             st.button('Iniciar juego de la vida', on_click=self.run_game_now)
+
+    def fill_with_random(self):
+        random_matrix = np.random.randint(low=0, high=2, size=(self.matriz_juego.shape[0],
+                                                               self.matriz_juego.shape[1]))
+        self.matriz_juego = np.maximum(random_matrix, self.matriz_juego)
+
+    
+        indices_uno = np.argwhere(random_matrix == 1)
+        indices_uno_orig = np.argwhere(random_matrix == 1)
+
+        for index in indices_uno:
+            x_initpx = index[0]*self.cuadrito
+            x_finpx = x_initpx+self.cuadrito
+            y_initpx = index[1]*self.cuadrito
+            y_finpx = y_initpx+self.cuadrito
+            self.img[y_initpx:y_finpx,x_initpx:x_finpx,:] = 0
+            
+        st.session_state["img_game"] = {'img': self.img, 
+                        'Matriz':self.matriz_juego}
+
+        st.write(f'Se encendieron {len(indices_uno) - len(indices_uno_orig)} celdas')
+        
 
     def run_game_now(self):
         st.session_state['run_game'] = True
