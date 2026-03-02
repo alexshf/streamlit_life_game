@@ -11,9 +11,9 @@
     <script type="module">
       import { mount } from "https://cdn.jsdelivr.net/npm/@stlite/browser@0.90.3/build/stlite.js"
       mount(
-            {requirements: ,
+            {requirements: ["numpy"],
               entrypoint: "cv_stream.py",
-              files: {"cv_stream.py", "./cv_stream.py"}
+              files: {"cv_stream.py": "./cv_stream.py"}
             },
             document.getElementById("root")
               )
