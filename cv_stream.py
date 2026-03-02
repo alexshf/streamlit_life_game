@@ -75,11 +75,11 @@ class juego_dela_vida:
         indices_cero = np.argwhere(self.matriz_juego == 0)
         indices_uno = np.argwhere(self.matriz_juego == 1)
 
-
+        new_matrix = self.matriz_juego.copy()
         reviven = 0
         for index in indices_cero:
             if np.sum(self.matriz_juego[max(index[0]-1,0):index[0]+2, max(index[1]-1,0):index[1]+2])==3:
-                self.matriz_juego[index[0],index[1]] = 1
+                new_matrix[index[0],index[1]] = 1
                 x_initpx = index[0]*self.cuadrito
                 x_finpx = x_initpx+self.cuadrito
                 y_initpx = index[1]*self.cuadrito
@@ -91,7 +91,7 @@ class juego_dela_vida:
         for index in indices_uno:
             vecinos = np.sum(self.matriz_juego[max(index[0]-1,0):index[0]+2, max(index[1]-1,0):index[1]+2]) - 1
             if vecinos<2 or vecinos>3:
-                self.matriz_juego[index[0],index[1]] = 0
+                new_matrix[index[0],index[1]] = 0
                 x_initpx = index[0]*self.cuadrito
                 x_finpx = x_initpx+self.cuadrito
                 y_initpx = index[1]*self.cuadrito
@@ -99,12 +99,13 @@ class juego_dela_vida:
                 self.img[y_initpx:y_finpx,x_initpx:x_finpx,:] = 255
                 mueren+=1
 
+        self.matriz_juego = new_matrix.copy()
         st.session_state["img_game"] = {'img': self.img, 
                         'Matriz':self.matriz_juego}
 
     
         st.write(f'reviven {reviven} \n mueren {mueren}')
-        time.sleep(0.2)
+        time.sleep(1/24)
         
         st.rerun()
 
